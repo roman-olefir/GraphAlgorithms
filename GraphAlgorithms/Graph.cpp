@@ -10,7 +10,7 @@ Graph::Graph(int vertices) : V(vertices), E(0) {
     adj.resize(V);
 }
 
-// Додавання ребра
+// Р”РѕРґР°РІР°РЅРЅСЏ СЂРµР±СЂР°
 void Graph::addEdge(int u, int v, int w) {
     if (u >= 0 && u < V && v >= 0 && v < V) {
         adj[u].push_back({ v, w });
@@ -19,7 +19,7 @@ void Graph::addEdge(int u, int v, int w) {
     }
 }
 
-// Очищення графа
+// РћС‡РёС‰РµРЅРЅСЏ РіСЂР°С„Р°
 void Graph::clear() {
     adj.clear();
     allEdges.clear();
@@ -27,7 +27,7 @@ void Graph::clear() {
     E = 0;
 }
 
-// Генерація випадкового графа
+// Р“РµРЅРµСЂР°С†С–СЏ РІРёРїР°РґРєРѕРІРѕРіРѕ РіСЂР°С„Р°
 void Graph::generateRandom(int vertices, int edges, int minW, int maxW) {
     clear();
     this->V = vertices;
@@ -43,17 +43,17 @@ void Graph::generateRandom(int vertices, int edges, int minW, int maxW) {
         int v = vDist(gen);
         int w = wDist(gen);
 
-        // Уникаємо петель (ребро саме в себе)
+        // РЈРЅРёРєР°С”РјРѕ РїРµС‚РµР»СЊ (СЂРµР±СЂРѕ СЃР°РјРµ РІ СЃРµР±Рµ)
         if (u != v) {
             addEdge(u, v, w);
         }
         else {
-            i--; // Повторна спроба, щоб набрати потрібну кількість ребер
+            i--; // РџРѕРІС‚РѕСЂРЅР° СЃРїСЂРѕР±Р°, С‰РѕР± РЅР°Р±СЂР°С‚Рё РїРѕС‚СЂС–Р±РЅСѓ РєС–Р»СЊРєС–СЃС‚СЊ СЂРµР±РµСЂ
         }
     }
 }
 
-// Вивід графа у консоль
+// Р’РёРІС–Рґ РіСЂР°С„Р° Сѓ РєРѕРЅСЃРѕР»СЊ
 void Graph::print() const {
     for (int i = 0; i < V; ++i) {
         cout << i << ": ";
