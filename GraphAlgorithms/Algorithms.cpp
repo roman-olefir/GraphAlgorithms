@@ -150,6 +150,14 @@ Result runSPFA(const Graph& g, int startNode) {
         res.queueOps++;
         inQueue[u] = false;
 
+        // Перевірка на від'ємний цикл
+        // Вершина u вийшла з черги. Якщо вона виходить вже V-й раз, то це від'ємний цик
+        count[u]++;
+        if (count[u] >= V) {
+            res.hasNegativeCycle = true;
+            goto end_spfa;
+        }
+
         for (const auto& edge : adj[u]) {
             res.relaxations++;
             if (res.dist[u] + edge.weight < res.dist[edge.to]) {
@@ -160,13 +168,6 @@ Result runSPFA(const Graph& g, int startNode) {
                     q.push(edge.to);
                     res.queueOps++;
                     inQueue[edge.to] = true;
-                    count[edge.to]++;
-
-                    // Якщо вершина оновлювалася більше ніж V разів, то це від'ємний цикл
-                    if (count[edge.to] >= V) {
-                        res.hasNegativeCycle = true;
-                        goto end_spfa; // Вихід з циклів
-                    }
                 }
             }
         }
