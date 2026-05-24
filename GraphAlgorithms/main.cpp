@@ -1,7 +1,9 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <limits>
 #include "Graph.h"
 #include "Algorithms.h"
+#include <string>
 
 using namespace std;
 
@@ -19,11 +21,36 @@ void printResultRow(const Result& res) {
 
 void runBenchmarkMenu(Graph& g) {
     int v, e, minW, maxW;
+
+    // функція для валідації
+    auto getValidatedInt = [](string prompt, int minVal, int maxVal) {
+        int val;
+        while (true) {
+            cout << prompt;
+            if (cin >> val && val >= minVal && val <= maxVal) {
+                return val;
+            }
+            else {
+                cout << "Помилка! Введіть ціле число в діапазоні від " << minVal << " до " << maxVal << "." << endl;
+                cin.clear(); // скидаємо стан помилки
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // очищуємо буфер
+            }
+        }
+        };
+
     cout << "\n--- Налаштування Бенчмарку ---" << endl;
-    cout << "Кількість вершин: "; cin >> v;
-    cout << "Кількість ребер: "; cin >> e;
-    cout << "Мінімальна вага: "; cin >> minW;
-    cout << "Максимальна вага: "; cin >> maxW;
+
+    // обмежененя 10000 вершин для стабільності 
+    v = getValidatedInt("Кількість вершин (2-50000): ", 2, 50000);
+
+    // кількість ребер не може бути більше ніж v*(v-1) для орієнтованого графа
+    long long maxPossibleEdges = (long long)v * (v - 1);
+    if (maxPossibleEdges > 50000) maxPossibleEdges = 500000; // обмеження
+
+    e = getValidatedInt("Кількість ребер (1-" + to_string(maxPossibleEdges) + "): ", 1, (int)maxPossibleEdges);
+
+    minW = getValidatedInt("Мінімальна вага (-1000..1000): ", -1000, 1000);
+    maxW = getValidatedInt("Максимальна вага (повинна бути >= " + to_string(minW) + "): ", minW, 1000);
 
     // Генеруємо граф
     g.generateRandom(v, e, minW, maxW);
